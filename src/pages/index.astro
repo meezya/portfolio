@@ -1,10 +1,41 @@
 ---
 import Layout from '../layouts/Layout.astro';
+
+const projects = [
+	{ slug: 'iso', name: 'Iso Design & Research' },
+	{ slug: 'bedside', name: 'Bedside' },
+	{ slug: 'goat', name: 'Goat' },
+	{ slug: 'drift', name: 'Drift' },
+];
 ---
 
 <Layout>
-	<main class="mx-auto max-w-2xl px-6 py-24">
-		<p class="text-sm tracking-wide text-neutral-500">Iso Design &amp; Research</p>
-		<h1 class="mt-4 text-3xl font-medium">Rameez Ahmad</h1>
+	<main class="mx-auto max-w-[1600px] px-12 py-24">
+		<section class="mb-32">
+			<p class="text-sm tracking-wide text-neutral-500 font-sans">Iso Design &amp; Research</p>
+			<h1 class="mt-3 text-3xl">Rameez Ahmad</h1>
+		</section>
+
+		<section class="space-y-40">
+			{projects.map((project) => (
+				<article class="grid grid-cols-12 gap-12 items-start">
+					<div class="col-span-4">
+						<div class="aspect-[4/5] bg-neutral-950 ring-1 ring-neutral-900/80"></div>
+					</div>
+
+					<div class="col-span-4">
+						<div class="aspect-[4/5] bg-neutral-950 ring-1 ring-neutral-900/80"></div>
+					</div>
+
+					<div class="col-span-4 pt-2">
+						<h2 class="text-4xl">{project.name}</h2>
+						<div class="mt-10 space-y-6 text-neutral-300">
+							<p>Description</p>
+							<p>Details</p>
+						</div>
+					</div>
+				</article>
+			))}
+		</section>
 	</main>
 </Layout>

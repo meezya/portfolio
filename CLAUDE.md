@@ -41,6 +41,19 @@ Secondary: be a place where Iso Design & Research lives as a brand, separate fro
 
 Consulting and brand work: anything artist or client-facing gets framed as work for clients, not personal brand stuff. This is a hard rule.
 
+## Grad school case studies (coming later)
+
+Grad school work (white papers, case studies from the WVU IMC program) will be added as project blocks alongside the technical projects. Each one has a PDF as the canonical artifact.
+
+Plan when we get to it:
+- Build an Astro content collection (`src/content/case-studies/`) where each entry has front-matter (title, abstract, year, course/client) plus an optional Markdown body for a web-readable version
+- PDFs live in `public/papers/<slug>.pdf`
+- Each case study gets a dedicated route like `/case-studies/<slug>` with the abstract, key visuals, and a "Download PDF" link to the original
+- On the home page, case studies use the same three-column project block as the apps (visual / preview / text). The "screenshot" slot becomes a cover-page preview image, the visual slot is the project's identity treatment
+- Hybrid approach: real web page per paper so hiring managers can skim in 20 seconds, plus the PDF for anyone who wants the full document
+
+Don't scaffold the collection until there's a first paper to add. Rameez will hand over the PDFs (or titles + abstracts) when ready.
+
 ## Aesthetic direction
 
 - Clean, elegant, understated
