@@ -100,17 +100,24 @@ export const sections: Section[] = [
 		id: 'research',
 		title: 'Research',
 		projects: [
-			// Grad school case studies go here. Example shape with a PDF tile:
-			//
-			// {
-			//   slug: 'imc-thesis',
-			//   name: 'Thesis on something',
-			//   body: ['Abstract paragraph.', 'Second paragraph.'],
-			//   tiles: [
-			//     { type: 'image', src: '/projects/imc-thesis/cover.jpg', width: 400, height: 500 },
-			//     { type: 'pdf', pdf: '/papers/imc-thesis.pdf', preview: '/projects/imc-thesis/preview.jpg', width: 400, height: 500, title: 'Read the full paper' },
-			//   ],
-			// },
+			{
+				slug: 'lucid-imc',
+				name: 'Lucid Motors: New Luxury',
+				body: [
+					'IMC 515 capstone. A brand campaign proposal for Lucid Motors, positioning the company as the next evolution of luxury, where innovation and refinement become inseparable.',
+					"Aimed at professionals 30 to 45 who're skeptical of tech-bro culture and unmoved by traditional luxury's predictability.",
+					'Positioning, audience strategy, creative direction, mood board, and channel executions across print, digital, billboard, and a hero anthem film.',
+					'WVU Reed College of Media. December 2024.',
+				],
+				tiles: [
+					{ type: 'image', src: '/projects/lucid-imc/cover.png', width: 540, height: 304, alt: 'Cover: Luxury, Reimagined' },
+					{ type: 'image', src: '/projects/lucid-imc/big-idea.png', width: 300, height: 304, alt: 'The Big Idea: This is New Luxury' },
+					{ type: 'image', src: '/projects/lucid-imc/mood-board.png', width: 430, height: 242, alt: 'Mood board' },
+					{ type: 'image', src: '/projects/lucid-imc/print.png', width: 410, height: 242, alt: 'Print executions' },
+					{ type: 'image', src: '/projects/lucid-imc/film.png', width: 450, height: 253, alt: 'Hero anthem film' },
+					{ type: 'pdf', pdf: '/papers/lucid-imc.pdf', preview: '/projects/lucid-imc/cover.png', width: 390, height: 253, title: 'Read the full proposal (17 pages)' },
+				],
+			},
 		],
 	},
 ];
