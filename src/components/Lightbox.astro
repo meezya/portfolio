@@ -1,0 +1,180 @@
+---
+import type { Section } from '../data/projects';
+
+interface Props {
+	sections: Section[];
+}
+
+const { sections } = Astro.props;
+
+// Build a per-project list of "carousel media" — image + video tiles only.
+// PDFs are excluded; they open in a new tab instead of the lightbox.
+type CarouselItem =
+	| { type: 'image'; src: string; alt: string }
+	| { type: 'video'; youtubeId: string; title: string };
+
+const carousels: Record<string, CarouselItem[]> = {};
+for (const section of sections) {
+	for (const project of section.projects) {
+		carousels[project.slug] = project.tiles
+			.filter((t): t is Extract<typeof t, { type: 'image' | 'video' }> => t.type === 'image' || t.type === 'video')
+			.map((t) =>
+				t.type === 'image'
+					? { type: 'image' as const, src: t.src, alt: t.alt ?? '' }
+					: { type: 'video' as const, youtubeId: t.youtubeId, title: t.title ?? '' }
+			);
+	}
+}
+---
+
+<dialog
+	id="lightbox"
+	class="m-0 h-full max-h-none w-full max-w-none bg-transparent p-0 text-neutral-100 backdrop:bg-black/95"
+>
+	<div class="relative flex h-full w-full items-center justify-center p-16">
+		<button
+			type="button"
+			data-lightbox-close
+			class="absolute right-6 top-6 flex h-12 w-12 items-center justify-center font-sans text-2xl text-neutral-400 transition-colors hover:text-white"
+			aria-label="Close"
+		>
+			×
+		</button>
+
+		<button
+			type="button"
+			data-lightbox-prev
+			class="absolute left-6 top-1/2 flex h-12 w-12 -translate-y-1/2 items-center justify-center font-sans text-2xl text-neutral-400 transition-colors hover:text-white"
+			aria-label="Previous"
+		>
+			←
+		</button>
+
+		<button
+			type="button"
+			data-lightbox-next
+			class="absolute right-6 top-1/2 flex h-12 w-12 -translate-y-1/2 items-center justify-center font-sans text-2xl text-neutral-400 transition-colors hover:text-white"
+			aria-label="Next"
+		>
+			→
+		</button>
+
+		<div
+			id="lightbox-content"
+			class="flex max-h-[80vh] max-w-[80vw] items-center justify-center"
+		>
+		</div>
+
+		<div
+			id="lightbox-counter"
+			class="absolute bottom-6 left-1/2 -translate-x-1/2 font-sans text-sm tracking-wide text-neutral-500"
+		>
+		</div>
+	</div>
+</dialog>
+
+<script is:inline define:vars={{ carousels }}>
+	(function () {
+		const dialog = document.getElementById('lightbox');
+		if (!dialog) return;
+		const content = document.getElementById('lightbox-content');
+		const counter = document.getElementById('lightbox-counter');
+		const prevBtn = dialog.querySelector('[data-lightbox-prev]');
+		const nextBtn = dialog.querySelector('[data-lightbox-next]');
+		const closeBtn = dialog.querySelector('[data-lightbox-close]');
+
+		let currentProject = null;
+		let currentIndex = 0;
+
+		function items() {
+			return (currentProject && carousels[currentProject]) || [];
+		}
+
+		function render() {
+			const list = items();
+			if (list.length === 0) return;
+			const item = list[currentIndex];
+			counter.textContent = list.length > 1 ? (currentIndex + 1) + ' / ' + list.length : '';
+			if (item.type === 'image') {
+				content.innerHTML =
+					'<img src="' +
+					item.src +
+					'" alt="' +
+					(item.alt || '') +
+					'" class="max-h-[80vh] max-w-[80vw] object-contain" />';
+			} else if (item.type === 'video') {
+				content.innerHTML =
+					'<iframe src="https://www.youtube.com/embed/' +
+					item.youtubeId +
+					'?autoplay=1&rel=0" title="' +
+					(item.title || 'Video') +
+					'" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen class="aspect-video w-[80vw] max-w-[1280px] border-0"></iframe>';
+			}
+			const multiple = list.length > 1;
+			prevBtn.style.display = multiple ? '' : 'none';
+			nextBtn.style.display = multiple ? '' : 'none';
+		}
+
+		function open(project, index) {
+			currentProject = project;
+			currentIndex = index || 0;
+			render();
+			dialog.showModal();
+			document.body.style.overflow = 'hidden';
+		}
+
+		function close() {
+			content.innerHTML = ''; // stop any video playback
+			dialog.close();
+			document.body.style.overflow = '';
+		}
+
+		function next() {
+			const list = items();
+			if (list.length === 0) return;
+			currentIndex = (currentIndex + 1) % list.length;
+			render();
+		}
+
+		function prev() {
+			const list = items();
+			if (list.length === 0) return;
+			currentIndex = (currentIndex - 1 + list.length) % list.length;
+			render();
+		}
+
+		// Event delegation: any tile button on the page triggers the lightbox.
+		document.addEventListener('click', function (e) {
+			const target = e.target;
+			if (!(target instanceof Element)) return;
+			const tile = target.closest('[data-tile-project]');
+			if (!tile) return;
+			e.preventDefault();
+			const project = tile.getAttribute('data-tile-project');
+			const index = parseInt(tile.getAttribute('data-tile-index') || '0', 10);
+			open(project, index);
+		});
+
+		closeBtn.addEventListener('click', close);
+		prevBtn.addEventListener('click', prev);
+		nextBtn.addEventListener('click', next);
+
+		document.addEventListener('keydown', function (e) {
+			if (!dialog.open) return;
+			if (e.key === 'ArrowLeft') prev();
+			else if (e.key === 'ArrowRight') next();
+			else if (e.key === 'Escape') close();
+		});
+
+		// Click on backdrop (the dialog itself, not its children) closes.
+		dialog.addEventListener('click', function (e) {
+			if (e.target === dialog) close();
+		});
+
+		// Esc fires 'close' on the dialog directly; ensure cleanup runs.
+		dialog.addEventListener('close', function () {
+			content.innerHTML = '';
+			document.body.style.overflow = '';
+		});
+	})();
+</script>

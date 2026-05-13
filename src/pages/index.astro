@@ -1,41 +1,164 @@
 ---
 import Layout from '../layouts/Layout.astro';
+import Lightbox from '../components/Lightbox.astro';
+import { sections, type Tile } from '../data/projects';
 
-const projects = [
-	{ slug: 'iso', name: 'Iso Design & Research' },
-	{ slug: 'bedside', name: 'Bedside' },
-	{ slug: 'goat', name: 'Goat' },
-	{ slug: 'drift', name: 'Drift' },
-];
+function tileStyle(tile: Tile): string {
+	const parts = [
+		`width: ${tile.width}px`,
+		`height: ${tile.height}px`,
+		'border: 1px solid #171717CC',
+		'background-size: cover',
+		'background-position: 50%',
+	];
+
+	if (tile.type === 'image') {
+		parts.push(`background-image: url(${tile.src})`);
+	} else if (tile.type === 'video') {
+		const thumb = tile.thumbnail ?? `https://img.youtube.com/vi/${tile.youtubeId}/maxresdefault.jpg`;
+		parts.push(`background-image: url(${thumb})`);
+	} else if (tile.type === 'pdf') {
+		parts.push(`background-image: url(${tile.preview})`);
+	}
+
+	if (tile.opacity !== undefined) parts.push(`opacity: ${tile.opacity}`);
+	if (tile.absolute) {
+		parts.push('position: absolute');
+		parts.push(`left: ${tile.absolute.left}px`);
+		parts.push(`top: ${tile.absolute.top}px`);
+	}
+	return parts.join('; ');
+}
+
+// Only render sections that have at least one project.
+const visibleSections = sections.filter((s) => s.projects.length > 0);
+const showNav = visibleSections.length >= 2;
+const showSectionLabels = visibleSections.length >= 2;
 ---
 
 <Layout>
+	<header class="mx-auto max-w-[1600px] px-12 pt-24">
+		<p class="font-sans text-sm tracking-wide text-neutral-500">Iso Design &amp; Research</p>
+		<div class="mt-3 flex items-baseline justify-between">
+			<h1 class="text-3xl">Rameez Ahmad</h1>
+			{
+				showNav && (
+					<nav class="flex gap-8 font-sans text-sm">
+						{visibleSections.map((s) => (
+							<a
+								href={`#${s.id}`}
+								class="text-neutral-400 transition-colors hover:text-neutral-100"
+							>
+								{s.title}
+							</a>
+						))}
+					</nav>
+				)
+			}
+		</div>
+	</header>
+
 	<main class="mx-auto max-w-[1600px] px-12 py-24">
-		<section class="mb-32">
-			<p class="text-sm tracking-wide text-neutral-500 font-sans">Iso Design &amp; Research</p>
-			<h1 class="mt-3 text-3xl">Rameez Ahmad</h1>
-		</section>
+		{
+			visibleSections.map((section, sIdx) => (
+				<section
+					id={section.id}
+					class:list={[sIdx > 0 ? 'mt-32 border-t border-neutral-900 pt-32' : '']}
+				>
+					{showSectionLabels && (
+						<p class="mb-16 font-sans text-xs uppercase tracking-[0.2em] text-neutral-500">
+							{section.title}
+						</p>
+					)}
 
-		<section class="space-y-40">
-			{projects.map((project) => (
-				<article class="grid grid-cols-12 gap-12 items-start">
-					<div class="col-span-4">
-						<div class="aspect-[4/5] bg-neutral-950 ring-1 ring-neutral-900/80"></div>
-					</div>
+					<div class="space-y-40">
+						{section.projects.map((project) => {
+							// Compute mediaIndex per tile: image and video tiles get an index
+							// into the per-project carousel; PDFs get null (not in carousel).
+							let mediaIdx = 0;
+							const annotated = project.tiles.map((tile) => {
+								if (tile.type === 'image' || tile.type === 'video') {
+									return { tile, mediaIndex: mediaIdx++ };
+								}
+								return { tile, mediaIndex: null as number | null };
+							});
 
-					<div class="col-span-4">
-						<div class="aspect-[4/5] bg-neutral-950 ring-1 ring-neutral-900/80"></div>
-					</div>
+							return (
+								<article class="flex items-start gap-12">
+									<div class="relative flex w-[864px] flex-shrink-0 flex-wrap gap-6">
+										{annotated.map(({ tile, mediaIndex }) => {
+											const flowClass = tile.absolute ? '' : 'flex-shrink-0';
+											const interactiveClass =
+												'tile cursor-pointer transition-opacity duration-200';
 
-					<div class="col-span-4 pt-2">
-						<h2 class="text-4xl">{project.name}</h2>
-						<div class="mt-10 space-y-6 text-neutral-300">
-							<p>Description</p>
-							<p>Details</p>
-						</div>
+											if (tile.type === 'pdf') {
+												return (
+													<a
+														href={tile.pdf}
+														target="_blank"
+														rel="noopener"
+														class:list={['block', flowClass, interactiveClass, 'relative']}
+														style={tileStyle(tile)}
+														aria-label={tile.title || 'View PDF'}
+													>
+														<span class="absolute bottom-3 left-3 right-3 font-sans text-xs uppercase tracking-[0.2em] text-neutral-300">
+															PDF · Read
+														</span>
+													</a>
+												);
+											}
+
+											return (
+												<button
+													type="button"
+													data-tile-project={project.slug}
+													data-tile-index={mediaIndex}
+													class:list={['block', flowClass, interactiveClass, 'relative']}
+													style={tileStyle(tile)}
+													aria-label={
+														tile.type === 'video'
+															? tile.title || 'Play video'
+															: tile.alt || 'View image'
+													}
+												>
+													{tile.type === 'video' && (
+														<span class="absolute inset-0 flex items-center justify-center bg-black/30">
+															<span class="flex h-16 w-16 items-center justify-center rounded-full bg-white/90 pl-1 text-xl text-black">
+																▶
+															</span>
+														</span>
+													)}
+												</button>
+											);
+										})}
+									</div>
+
+									<div class="flex w-[432px] flex-shrink-0 flex-col gap-10 pt-2">
+										<h2 class="text-4xl font-bold">{project.name}</h2>
+										<div class="flex flex-col gap-6">
+											{project.body.map((para) => (
+												<p class="text-base leading-6 text-neutral-300">{para}</p>
+											))}
+										</div>
+									</div>
+								</article>
+							);
+						})}
 					</div>
-				</article>
-			))}
-		</section>
+				</section>
+			))
+		}
 	</main>
+
+	<Lightbox sections={sections} />
 </Layout>
+
+<style>
+	/* Hover boost: nudge faded tiles toward full opacity on hover.
+	   Using a non-!important rule is fine here because inline `opacity` is
+	   applied via style="" but our hover specificity still wins thanks to
+	   the .tile class + :hover. The duration matches the transition above. */
+	.tile:hover {
+		opacity: 1 !important;
+	}
+</style>
