@@ -140,7 +140,7 @@ export const sections: Section[] = [
 					{
 						type: 'video',
 						youtubeId: 'vknPd9PfvMs',
-						thumbnail: 'https://app.paper.design/file-assets/01KREYJZZ62W205RMETRV4HR3R/01KRHX0AHXMS2N6XT0ZWXHQDPH.png',
+						thumbnail: 'https://app.paper.design/file-assets/01KREYJZZ62W205RMETRV4HR3R/01KRHYEY7RK2WWR2RZAGX2K13X.png',
 						width: 390,
 						height: 253,
 						opacity: 0.24,
