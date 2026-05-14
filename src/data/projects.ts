@@ -20,6 +20,13 @@ export type BaseTile = {
 	// (e.g. "PDF · Read", "Tv Spot · watch"). PDF tiles default to "PDF · Read"
 	// if not specified.
 	caption?: string;
+	// Optional background-size and background-position overrides, used when
+	// the Paper canvas has reframed/cropped an image inside the tile (the
+	// image is rendered at native size and offset rather than cover). Both
+	// values are CSS strings, e.g. "562px 453px" + "0px -149px". When omitted
+	// the tile defaults to cover / center.
+	bgSize?: string;
+	bgPosition?: string;
 };
 
 export type ImageTile = BaseTile & {
@@ -162,15 +169,51 @@ export const sections: Section[] = [
 					'WVU Reed College of Media. April 2025.',
 				],
 				tiles: [
-					{ type: 'image', src: '/projects/walgreens-wellness/talent.png', width: 540, height: 304 },
-					{ type: 'image', src: '/projects/walgreens-wellness/twc-poster.png', width: 300, height: 304 },
-					{ type: 'image', src: '/projects/walgreens-wellness/metro-billboard.png', width: 430, height: 242 },
-					{ type: 'image', src: '/projects/walgreens-wellness/bus.png', width: 410, height: 242 },
-					{ type: 'image', src: '/projects/walgreens-wellness/under-bridge.png', width: 450, height: 253 },
+					{
+						type: 'image',
+						src: 'https://app.paper.design/file-assets/01KREYJZZ62W205RMETRV4HR3R/70YMX5FQ612S9XHVDJNZT7JKPB.png',
+						width: 540,
+						height: 304,
+						bgSize: '562px 453px',
+						bgPosition: '0px -149px',
+					},
+					{
+						type: 'image',
+						src: 'https://app.paper.design/file-assets/01KREYJZZ62W205RMETRV4HR3R/01KRJ15HE46MCJ4ANZTJK4V0KP.png',
+						width: 300,
+						height: 304,
+						bgSize: '313px 377px',
+						bgPosition: '-7px -27px',
+					},
+					{
+						type: 'image',
+						src: 'https://app.paper.design/file-assets/01KREYJZZ62W205RMETRV4HR3R/41ZSXPGHD2QX6BJ5JK42EHNNX4.png',
+						width: 430,
+						height: 242,
+						bgSize: '658px 334px',
+						bgPosition: '-63px -37px',
+					},
+					{
+						type: 'image',
+						src: 'https://app.paper.design/file-assets/01KREYJZZ62W205RMETRV4HR3R/01KRJ1GQM066WPEBMVJZS93VWZ.png',
+						width: 398,
+						height: 242,
+						bgSize: '495px 391px',
+						bgPosition: '-17px -66px',
+					},
+					{
+						type: 'image',
+						src: 'https://app.paper.design/file-assets/01KREYJZZ62W205RMETRV4HR3R/066WR73PMBWJ2MX7RRK7HD6K4D.png',
+						width: 450,
+						height: 253,
+						bgSize: '449px 243px',
+						bgPosition: '-10px 0px',
+					},
 					{
 						type: 'pdf',
 						pdf: '/papers/walgreens-wellness.pdf',
-						preview: '/projects/walgreens-wellness/tennis-poster.png',
+						preview:
+							'https://app.paper.design/file-assets/01KREYJZZ62W205RMETRV4HR3R/79TT1VHS92ZW2A3VNVJ1YHN5RW.png',
 						width: 390,
 						height: 253,
 						opacity: 0.4,

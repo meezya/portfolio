@@ -17,9 +17,15 @@ function tileFrameStyle(tile: Tile): string {
 }
 
 // Inner background layer: cover-positioned image + per-tile opacity. This
-// lets the caption / play overlay sit on top at full opacity.
+// lets the caption / play overlay sit on top at full opacity. When a tile
+// sets bgSize/bgPosition (Paper reframed an image with explicit crop) we
+// use those values verbatim instead of cover/center.
 function tileBgStyle(tile: Tile): string {
-	const parts = ['background-size: cover', 'background-position: 50%'];
+	const parts = [
+		`background-size: ${tile.bgSize ?? 'cover'}`,
+		`background-position: ${tile.bgPosition ?? '50%'}`,
+		'background-repeat: no-repeat',
+	];
 
 	if (tile.type === 'image') {
 		parts.push(`background-image: url(${tile.src})`);
