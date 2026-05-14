@@ -1,3 +1,6 @@
+// @ts-ignore — Vite handles the ?raw suffix at build time.
+import brandWorksOrderRaw from './brand-works-order.txt?raw';
+
 // Data model for portfolio projects.
 //
 // Each project has a `tiles` array. Tiles are discriminated by `type`:
@@ -76,6 +79,16 @@ export type Section = {
 	layout?: 'gallery';
 	tiles?: Tile[];
 };
+
+// Parse the brand-works manifest into a tile list at build time. Comments
+// (#) and blank lines are ignored; each remaining line is one image
+// filename inside /public/projects/brand-works/. Reorder by editing the
+// .txt file, no code changes needed.
+const brandWorksTiles: Tile[] = String(brandWorksOrderRaw)
+	.split('\n')
+	.map((line) => line.split('#')[0].trim())
+	.filter((line) => line.length > 0)
+	.map((filename) => ({ type: 'image' as const, src: `/projects/brand-works/${filename}` }));
 
 export const sections: Section[] = [
 	{
@@ -258,25 +271,9 @@ export const sections: Section[] = [
 		title: 'Selected Brand Works',
 		layout: 'gallery',
 		projects: [],
-		tiles: [
-			{ type: 'image', src: '/projects/brand-works/adobe-1.jpg' },
-			{ type: 'image', src: '/projects/brand-works/creative-corp.jpg' },
-			{ type: 'image', src: '/projects/brand-works/adobe-3.jpg' },
-			{ type: 'image', src: '/projects/brand-works/creative-image.jpg' },
-			{ type: 'image', src: '/projects/brand-works/personalized-website.jpg' },
-			{ type: 'image', src: '/projects/brand-works/adobe-4.jpg' },
-			{ type: 'image', src: '/projects/brand-works/creative-deep-4.jpg' },
-			{ type: 'image', src: '/projects/brand-works/adobe-1-copy.jpg' },
-			{ type: 'image', src: '/projects/brand-works/creative-her-3.jpg' },
-			{ type: 'image', src: '/projects/brand-works/adobe-4-copy.jpg' },
-			{ type: 'image', src: '/projects/brand-works/other-1.png' },
-			{ type: 'image', src: '/projects/brand-works/shirt-design.png' },
-			{ type: 'image', src: '/projects/brand-works/adobe-4-copy-2.jpg' },
-			{ type: 'image', src: '/projects/brand-works/drif-3.png' },
-			{ type: 'image', src: '/projects/brand-works/goat-icawn.png' },
-			{ type: 'image', src: '/projects/brand-works/bruh.png' },
-			{ type: 'image', src: '/projects/brand-works/drif-5.png' },
-			{ type: 'image', src: '/projects/brand-works/untitled-fum.png' },
-		],
+		// Tiles come from src/data/brand-works-order.txt — drag lines around in
+		// that file to reorder; the order shown below at runtime is whatever
+		// the manifest dictates at build time.
+		tiles: brandWorksTiles,
 	},
 ];
