@@ -225,6 +225,33 @@ export const sections: Section[] = [
 					},
 				],
 			},
+			{
+				slug: 'healthcare-bystanders',
+				name: 'Addressing The Bystanders: An Integrated Marketing Plan for Launching a Satellite Clinic in Rural Sullivan County, New York',
+				headingFont: 'STSong',
+				headingWeight: 300,
+				body: [
+					`Strategic plan for an affluent for-profit hospital opening its first satellite clinic in Sullivan County, New York. Rural, underserved, chronic gaps in preventive care and disease management. The challenge is building trust and engagement in a population that healthcare systems typically miss.`,
+					`Audience targeting uses two frameworks: Bloem-Stalpers Segment 4 and Deloitte's "Bystanders" segment from "Attract, engage, and build loyalty." Both describe patients who are passive about their health and skeptical of healthcare institutions. Reaching them requires earning trust before asking for engagement.`,
+					`Strategy applies Social Cognitive Theory to the design: messaging built around self-efficacy, role modeling, and outcomes patients can recognize in their own lives.`,
+					`Three objectives: empower patients, build trust between the clinic and the community, and improve health outcomes in the region.`,
+				],
+				tiles: [
+					{ type: 'image', src: '/projects/healthcare-bystanders/preview-1.webp', width: 540, height: 304 },
+					{ type: 'image', src: '/projects/healthcare-bystanders/preview-2.jpg', width: 300, height: 304 },
+					{ type: 'image', src: '/projects/healthcare-bystanders/preview-3.png', width: 410, height: 242 },
+					{
+						type: 'pdf',
+						pdf: '/papers/healthcare-bystanders.pdf',
+						preview: '/projects/healthcare-bystanders/preview-1.webp',
+						width: 430,
+						height: 242,
+						opacity: 0.4,
+						title: 'Read the full plan',
+						caption: 'Pdf · Read',
+					},
+				],
+			},
 		],
 	},
 	{
