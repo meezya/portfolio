@@ -96,20 +96,27 @@ const showSectionLabels = visibleSections.length >= 2;
 					)}
 
 					{section.layout === 'gallery' && section.tiles && (
-						<div class="gap-6 [column-count:2] md:[column-count:3] xl:[column-count:4]">
-							{section.tiles.map((tile, tIdx) => (
-								tile.type === 'image' ? (
-									<button
-										type="button"
-										data-tile-project={section.id}
-										data-tile-index={tIdx}
-										class="tile-wrap mb-6 block w-full break-inside-avoid cursor-pointer transition-opacity duration-200"
-										aria-label={tile.alt || 'View image'}
-									>
-										<img src={tile.src} alt={tile.alt || ''} class="tile-bg block w-full" />
-									</button>
-								) : null
-							))}
+						<div data-drag-scroll class="gallery-scroll overflow-x-auto">
+							<div class="flex gap-6 pb-4">
+								{section.tiles.map((tile, tIdx) => (
+									tile.type === 'image' ? (
+										<button
+											type="button"
+											data-tile-project={section.id}
+											data-tile-index={tIdx}
+											class="tile-wrap relative block h-[420px] flex-shrink-0 cursor-pointer overflow-hidden transition-opacity duration-200"
+											aria-label={tile.alt || 'View image'}
+										>
+											<img
+												src={tile.src}
+												alt={tile.alt || ''}
+												draggable={false}
+												class="tile-bg block h-full w-auto max-w-none select-none"
+											/>
+										</button>
+									) : null
+								))}
+							</div>
 						</div>
 					)}
 
@@ -237,4 +244,95 @@ const showSectionLabels = visibleSections.length >= 2;
 			zoom: clamp(0.55, calc(100vw / 1600px), 1);
 		}
 	}
+
+	/* Horizontal-scroll gallery: trackpad-swipe works natively, mouse drag is
+	   wired up via the script below. Cursor flips to grabbing while a drag is
+	   in progress; clicks that follow a real drag get suppressed. */
+	.gallery-scroll {
+		cursor: grab;
+		scroll-behavior: smooth;
+		scrollbar-color: #2d2d2d transparent;
+		scrollbar-width: thin;
+	}
+	.gallery-scroll.is-dragging {
+		cursor: grabbing;
+		scroll-behavior: auto;
+		user-select: none;
+	}
+	.gallery-scroll.is-dragging img {
+		pointer-events: none;
+	}
+	.gallery-scroll::-webkit-scrollbar {
+		height: 6px;
+	}
+	.gallery-scroll::-webkit-scrollbar-track {
+		background: transparent;
+	}
+	.gallery-scroll::-webkit-scrollbar-thumb {
+		background: #2d2d2d;
+		border-radius: 3px;
+	}
+	.gallery-scroll::-webkit-scrollbar-thumb:hover {
+		background: #5b5b5b;
+	}
 </style>
+
+<script is:inline>
+	// Mouse-drag horizontal scroll for [data-drag-scroll] containers. Trackpad
+	// horizontal scroll already works natively via overflow-x; this is only
+	// for mouse users. Drags that exceed a small threshold suppress the
+	// trailing click so the lightbox doesn't open mid-drag.
+	(function () {
+		const DRAG_THRESHOLD = 6; // px
+
+		document.querySelectorAll('[data-drag-scroll]').forEach((el) => {
+			let isDown = false;
+			let startX = 0;
+			let startScroll = 0;
+			let dragDistance = 0;
+
+			el.addEventListener('mousedown', (e) => {
+				// Only respond to left mouse button.
+				if (e.button !== 0) return;
+				isDown = true;
+				dragDistance = 0;
+				startX = e.pageX;
+				startScroll = el.scrollLeft;
+				el.classList.add('is-dragging');
+			});
+
+			const stop = () => {
+				if (!isDown) return;
+				isDown = false;
+				el.classList.remove('is-dragging');
+			};
+
+			el.addEventListener('mouseleave', stop);
+			el.addEventListener('mouseup', stop);
+
+			el.addEventListener('mousemove', (e) => {
+				if (!isDown) return;
+				const delta = e.pageX - startX;
+				dragDistance = Math.abs(delta);
+				el.scrollLeft = startScroll - delta;
+			});
+
+			// Swallow the trailing click if the user actually dragged. Use
+			// capture so we run before the document-level lightbox listener.
+			el.addEventListener(
+				'click',
+				(e) => {
+					if (dragDistance > DRAG_THRESHOLD) {
+						e.preventDefault();
+						e.stopPropagation();
+					}
+				},
+				true,
+			);
+
+			// Prevent the browser's native image-drag (which would otherwise
+			// hijack the mouse drag and start a file-drag operation).
+			el.addEventListener('dragstart', (e) => e.preventDefault());
+		});
+	})();
+</script>
