@@ -50,8 +50,11 @@ function tileBgStyle(tile: Tile): string {
 	return parts.join('; ');
 }
 
-// Only render sections that have at least one project.
-const visibleSections = sections.filter((s) => s.projects.length > 0);
+// Render any section that has either projects or gallery tiles.
+const visibleSections = sections.filter((s) => {
+	if (s.layout === 'gallery') return (s.tiles?.length ?? 0) > 0;
+	return s.projects.length > 0;
+});
 const showNav = visibleSections.length >= 2;
 const showSectionLabels = visibleSections.length >= 2;
 ---
@@ -92,6 +95,25 @@ const showSectionLabels = visibleSections.length >= 2;
 						</p>
 					)}
 
+					{section.layout === 'gallery' && section.tiles && (
+						<div class="gap-6 [column-count:2] md:[column-count:3] xl:[column-count:4]">
+							{section.tiles.map((tile, tIdx) => (
+								tile.type === 'image' ? (
+									<button
+										type="button"
+										data-tile-project={section.id}
+										data-tile-index={tIdx}
+										class="tile-wrap mb-6 block w-full break-inside-avoid cursor-pointer transition-opacity duration-200"
+										aria-label={tile.alt || 'View image'}
+									>
+										<img src={tile.src} alt={tile.alt || ''} class="tile-bg block w-full" />
+									</button>
+								) : null
+							))}
+						</div>
+					)}
+
+					{section.layout !== 'gallery' && (
 					<div class="space-y-40">
 						{section.projects.map((project) => {
 							// Compute mediaIndex per tile: image and video tiles get an index
@@ -185,6 +207,7 @@ const showSectionLabels = visibleSections.length >= 2;
 							);
 						})}
 					</div>
+					)}
 				</section>
 			))
 		}

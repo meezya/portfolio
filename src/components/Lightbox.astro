@@ -13,16 +13,25 @@ type CarouselItem =
 	| { type: 'image'; src: string; alt: string }
 	| { type: 'video'; youtubeId: string; title: string };
 
+function buildCarousel(tiles: typeof sections[number]['projects'][number]['tiles']): CarouselItem[] {
+	return tiles
+		.filter((t): t is Extract<typeof t, { type: 'image' | 'video' }> => t.type === 'image' || t.type === 'video')
+		.map((t) =>
+			t.type === 'image'
+				? { type: 'image' as const, src: t.src, alt: t.alt ?? '' }
+				: { type: 'video' as const, youtubeId: t.youtubeId, title: t.title ?? '' }
+		);
+}
+
 const carousels: Record<string, CarouselItem[]> = {};
 for (const section of sections) {
+	// Gallery sections: carousel keyed by section id, holds all section tiles.
+	if (section.layout === 'gallery' && section.tiles) {
+		carousels[section.id] = buildCarousel(section.tiles);
+	}
+	// Project sections: carousel per project keyed by project slug.
 	for (const project of section.projects) {
-		carousels[project.slug] = project.tiles
-			.filter((t): t is Extract<typeof t, { type: 'image' | 'video' }> => t.type === 'image' || t.type === 'video')
-			.map((t) =>
-				t.type === 'image'
-					? { type: 'image' as const, src: t.src, alt: t.alt ?? '' }
-					: { type: 'video' as const, youtubeId: t.youtubeId, title: t.title ?? '' }
-			);
+		carousels[project.slug] = buildCarousel(project.tiles);
 	}
 }
 ---

@@ -12,8 +12,11 @@
 // overlapping collage layouts (relative to the project's media frame).
 
 export type BaseTile = {
-	width: number;
-	height: number;
+	// Width / height are required for project tiles (fixed-size collages). They
+	// are optional for gallery tiles, which flow inside a CSS columns layout
+	// and take their column's width with natural aspect-driven height.
+	width?: number;
+	height?: number;
 	opacity?: number;
 	absolute?: { left: number; top: number };
 	// Optional uppercased label rendered in the bottom corner of the tile
@@ -67,6 +70,11 @@ export type Section = {
 	id: string;
 	title: string;
 	projects: Project[];
+	// Optional layout override. When 'gallery', the section ignores `projects`
+	// and renders `tiles` directly as a sprawling masonry collage with no
+	// per-tile text or articles.
+	layout?: 'gallery';
+	tiles?: Tile[];
 };
 
 export const sections: Section[] = [
@@ -217,6 +225,32 @@ export const sections: Section[] = [
 					},
 				],
 			},
+		],
+	},
+	{
+		id: 'brand-works',
+		title: 'Selected Brand Works',
+		layout: 'gallery',
+		projects: [],
+		tiles: [
+			{ type: 'image', src: '/projects/brand-works/adobe-1.jpg' },
+			{ type: 'image', src: '/projects/brand-works/creative-corp.jpg' },
+			{ type: 'image', src: '/projects/brand-works/adobe-3.jpg' },
+			{ type: 'image', src: '/projects/brand-works/creative-image.jpg' },
+			{ type: 'image', src: '/projects/brand-works/personalized-website.jpg' },
+			{ type: 'image', src: '/projects/brand-works/adobe-4.jpg' },
+			{ type: 'image', src: '/projects/brand-works/creative-deep-4.jpg' },
+			{ type: 'image', src: '/projects/brand-works/adobe-1-copy.jpg' },
+			{ type: 'image', src: '/projects/brand-works/creative-her-3.jpg' },
+			{ type: 'image', src: '/projects/brand-works/adobe-4-copy.jpg' },
+			{ type: 'image', src: '/projects/brand-works/other-1.png' },
+			{ type: 'image', src: '/projects/brand-works/shirt-design.png' },
+			{ type: 'image', src: '/projects/brand-works/adobe-4-copy-2.jpg' },
+			{ type: 'image', src: '/projects/brand-works/drif-3.png' },
+			{ type: 'image', src: '/projects/brand-works/goat-icawn.png' },
+			{ type: 'image', src: '/projects/brand-works/bruh.png' },
+			{ type: 'image', src: '/projects/brand-works/drif-5.png' },
+			{ type: 'image', src: '/projects/brand-works/untitled-fum.png' },
 		],
 	},
 ];
