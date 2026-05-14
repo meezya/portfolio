@@ -16,6 +16,10 @@ export type BaseTile = {
 	height: number;
 	opacity?: number;
 	absolute?: { left: number; top: number };
+	// Optional uppercased label rendered in the bottom corner of the tile
+	// (e.g. "PDF · Read", "Tv Spot · watch"). PDF tiles default to "PDF · Read"
+	// if not specified.
+	caption?: string;
 };
 
 export type ImageTile = BaseTile & {
@@ -111,19 +115,44 @@ export const sections: Section[] = [
 			{
 				slug: 'lucid-imc',
 				name: 'Lucid Motors: New Luxury',
+				headingFont: 'STSong',
+				headingWeight: 300,
 				body: [
-					'IMC 515 capstone. A brand campaign proposal for Lucid Motors, positioning the company as the next evolution of luxury, where innovation and refinement become inseparable.',
+					'A brand campaign proposal for Lucid Motors, positioning the company as the next evolution of luxury, where innovation and refinement become inseparable.',
 					"Aimed at professionals 30 to 45 who're skeptical of tech-bro culture and unmoved by traditional luxury's predictability.",
 					'Positioning, audience strategy, creative direction, mood board, and channel executions across print, digital, billboard, and a hero anthem film.',
 					'WVU Reed College of Media. December 2024.',
 				],
 				tiles: [
-					{ type: 'image', src: '/projects/lucid-imc/cover.png', width: 540, height: 304, alt: 'Cover: Luxury, Reimagined' },
-					{ type: 'image', src: '/projects/lucid-imc/big-idea.png', width: 300, height: 304, alt: 'The Big Idea: This is New Luxury' },
-					{ type: 'image', src: '/projects/lucid-imc/mood-board.png', width: 430, height: 242, alt: 'Mood board' },
-					{ type: 'image', src: '/projects/lucid-imc/print.png', width: 410, height: 242, alt: 'Print executions' },
-					{ type: 'video', youtubeId: 'vknPd9PfvMs', thumbnail: '/projects/lucid-imc/film-thumb.jpg', width: 450, height: 253, title: 'Anthem :60' },
-					{ type: 'pdf', pdf: '/papers/lucid-imc.pdf', preview: '/projects/lucid-imc/cover.png', width: 390, height: 253, title: 'Read the full proposal (17 pages)' },
+					{
+						type: 'pdf',
+						pdf: '/papers/lucid-imc.pdf',
+						preview: 'https://app.paper.design/file-assets/01KREYJZZ62W205RMETRV4HR3R/2WY5356T3XMBFV9ACY9D05AEHQ.png',
+						width: 540,
+						height: 304,
+						opacity: 0.4,
+						title: 'Read the full proposal (17 pages)',
+						caption: 'Pdf · Read',
+					},
+					{ type: 'image', src: 'https://app.paper.design/file-assets/01KREYJZZ62W205RMETRV4HR3R/01KRHVMPG96WAAGFG8MSPQMRW5.png', width: 300, height: 304 },
+					{ type: 'image', src: 'https://app.paper.design/file-assets/01KREYJZZ62W205RMETRV4HR3R/6V90JW4BXCX63E6M7D1BVS94DE.png', width: 430, height: 242 },
+					{ type: 'image', src: 'https://app.paper.design/file-assets/01KREYJZZ62W205RMETRV4HR3R/3WHMF5Z04HABST9D96MWM5JEJV.png', width: 410, height: 242 },
+					{
+						type: 'video',
+						youtubeId: 'vknPd9PfvMs',
+						thumbnail: 'https://app.paper.design/file-assets/01KREYJZZ62W205RMETRV4HR3R/4TR60DEHGXZJSN5EFRSXF1AN5B.jpg',
+						width: 450,
+						height: 253,
+						title: 'Anthem :60',
+					},
+					{
+						type: 'image',
+						src: 'https://app.paper.design/file-assets/01KREYJZZ62W205RMETRV4HR3R/01KRHX0AHXMS2N6XT0ZWXHQDPH.png',
+						width: 390,
+						height: 253,
+						opacity: 0.24,
+						caption: 'Tv Spot · watch',
+					},
 				],
 			},
 		],
