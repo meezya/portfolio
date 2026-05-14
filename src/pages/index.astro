@@ -16,16 +16,26 @@ function tileFrameStyle(tile: Tile): string {
 	return parts.join('; ');
 }
 
-// Inner background layer: cover-positioned image + per-tile opacity. This
-// lets the caption / play overlay sit on top at full opacity. When a tile
-// sets bgSize/bgPosition (Paper reframed an image with explicit crop) we
-// use those values verbatim instead of cover/center.
+// Inner background layer. Cover-fits the image inside the bg frame and
+// preserves aspect ratio. When tile.frame is set, the bg layer takes those
+// exact dimensions and offsets within the tile (matches Paper's nested
+// "frame + cover-fit + offset" reframing); otherwise it fills the tile.
 function tileBgStyle(tile: Tile): string {
 	const parts = [
-		`background-size: ${tile.bgSize ?? 'cover'}`,
-		`background-position: ${tile.bgPosition ?? '50%'}`,
+		'position: absolute',
+		'background-size: cover',
+		'background-position: 50%',
 		'background-repeat: no-repeat',
 	];
+
+	if (tile.frame) {
+		parts.push(`left: ${tile.frame.left}px`);
+		parts.push(`top: ${tile.frame.top}px`);
+		parts.push(`width: ${tile.frame.width}px`);
+		parts.push(`height: ${tile.frame.height}px`);
+	} else {
+		parts.push('inset: 0');
+	}
 
 	if (tile.type === 'image') {
 		parts.push(`background-image: url(${tile.src})`);
@@ -113,7 +123,7 @@ const showSectionLabels = visibleSections.length >= 2;
 														style={tileFrameStyle(tile)}
 														aria-label={tile.title || 'View PDF'}
 													>
-														<div class="tile-bg absolute inset-0" style={tileBgStyle(tile)}></div>
+														<div class="tile-bg" style={tileBgStyle(tile)}></div>
 														{pdfCaption && (
 															<span class="absolute bottom-3 left-3 right-3 font-sans text-xs uppercase tracking-[0.2em] text-neutral-300">
 																{pdfCaption}
@@ -136,7 +146,7 @@ const showSectionLabels = visibleSections.length >= 2;
 															: tile.alt || 'View image'
 													}
 												>
-													<div class="tile-bg absolute inset-0" style={tileBgStyle(tile)}></div>
+													<div class="tile-bg" style={tileBgStyle(tile)}></div>
 													{tile.type === 'video' && !tile.caption && (
 														<span class="absolute inset-0 flex items-center justify-center bg-black/30">
 															<span class="flex h-16 w-16 items-center justify-center rounded-full bg-white/90 pl-1 text-xl text-black">
