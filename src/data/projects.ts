@@ -44,6 +44,10 @@ export type Tile = ImageTile | VideoTile | PdfTile;
 export type Project = {
 	slug: string;
 	name: string;
+	// Optional per-project heading font + weight to give each section its own
+	// visual identity. Falls back to the layout's default serif when omitted.
+	headingFont?: string;
+	headingWeight?: number;
 	body: string[];
 	tiles: Tile[];
 };
@@ -62,6 +66,8 @@ export const sections: Section[] = [
 			{
 				slug: 'goat',
 				name: 'Goat',
+				headingFont: 'STSong',
+				headingWeight: 300,
 				body: [
 					'A custom-built media center and game launcher designed for living room PCs.',
 					'Console and streaming UI cues, built for 10-foot HTPC viewing. Transparent black and white with glassmorphism. Heavy typography, generous spacing.',
@@ -81,17 +87,19 @@ export const sections: Section[] = [
 			{
 				slug: 'bedside',
 				name: 'Bedside',
+				headingFont: 'STSong',
+				headingWeight: 300,
 				body: [
-					'A Mac EPUB reader with a moody, old-library aesthetic. Glassmorphism, film grain, gradient controls.',
-					'Candlelight mode illuminates words near your cursor and fades the rest. Per-book settings let you tune the environment to each text.',
-					"Annotations and text-to-speech built in. Library search pulls from Anna's Archive and Z-Library.",
+					'EPUB reader with a moody, old-library aesthetic. Glassmorphism, film grain, animated gradient backgrounds. Built to feel like an environment, not just a screen.',
+					"Candlelight mode illuminates words near your cursor and fades the rest, mimicking the natural focus of reading under a single light source. Per-book settings save independently, so a gothic novel doesn't need to read like a tech manual.",
+					'Highlight and save snippets to revisit per book. Annotations, find-in-book search, and text-to-speech all built in.',
+					"Library search pulls from Anna's Archive and Z-Library, so almost any book is one query away.",
 				],
 				tiles: [
 					{ type: 'image', src: 'https://app.paper.design/file-assets/01KREYJZZ62W205RMETRV4HR3R/01KRF0BMZVY55J956MVNAWB92P.png', width: 534, height: 349 },
-					{ type: 'image', src: 'https://app.paper.design/file-assets/01KREYJZZ62W205RMETRV4HR3R/01KRF1A2664HK0F61VKJ5KYGQY.png', width: 297, height: 349 },
-					{ type: 'image', src: 'https://app.paper.design/file-assets/01KREYJZZ62W205RMETRV4HR3R/01KRF13XG6MRFTJN8CN8BCH1C4.png', width: 382, height: 413 },
-					{ type: 'image', src: 'https://app.paper.design/file-assets/01KREYJZZ62W205RMETRV4HR3R/01KRF0D11MHP8DJ29S6M591FVZ.png', width: 448, height: 223 },
-					{ type: 'image', src: 'https://app.paper.design/file-assets/01KREYJZZ62W205RMETRV4HR3R/01KRF136MZVBZHFNEVCX0DZ8Q1.png', width: 448, height: 164, absolute: { left: 406, top: 622 } },
+					{ type: 'image', src: 'https://app.paper.design/file-assets/01KREYJZZ62W205RMETRV4HR3R/01KRHBBQE2ZT1XGABN7FAT7PPC.png', width: 297, height: 349 },
+					{ type: 'image', src: 'https://app.paper.design/file-assets/01KREYJZZ62W205RMETRV4HR3R/01KRF13XG6MRFTJN8CN8BCH1C4.png', width: 382, height: 254 },
+					{ type: 'image', src: 'https://app.paper.design/file-assets/01KREYJZZ62W205RMETRV4HR3R/01KRHV8Y4E229XB7R2A9WQ3WR7.png', width: 448, height: 254 },
 				],
 			},
 		],
@@ -114,7 +122,7 @@ export const sections: Section[] = [
 					{ type: 'image', src: '/projects/lucid-imc/big-idea.png', width: 300, height: 304, alt: 'The Big Idea: This is New Luxury' },
 					{ type: 'image', src: '/projects/lucid-imc/mood-board.png', width: 430, height: 242, alt: 'Mood board' },
 					{ type: 'image', src: '/projects/lucid-imc/print.png', width: 410, height: 242, alt: 'Print executions' },
-					{ type: 'image', src: '/projects/lucid-imc/film.png', width: 450, height: 253, alt: 'Hero anthem film' },
+					{ type: 'video', youtubeId: 'vknPd9PfvMs', thumbnail: '/projects/lucid-imc/film-thumb.jpg', width: 450, height: 253, title: 'Anthem :60' },
 					{ type: 'pdf', pdf: '/papers/lucid-imc.pdf', preview: '/projects/lucid-imc/cover.png', width: 390, height: 253, title: 'Read the full proposal (17 pages)' },
 				],
 			},
