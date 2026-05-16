@@ -283,7 +283,7 @@ export const sections: Section[] = [
 					{
 						type: 'pdf',
 						pdf: '/papers/sonos-audit.pdf',
-						preview: '/projects/sonos-audit/graphic.png',
+						preview: '/projects/sonos-audit/cover.png',
 						width: 272,
 						height: 300,
 						opacity: 0.4,
