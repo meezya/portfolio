@@ -1,1 +1,26 @@
-https://www.youtube.com/watch?v=vknPd9PfvMs
+# Selected Brand Works gallery order.
+# One filename per line, in the order you want them to appear (top-left → bottom-right).
+# Lines starting with # are ignored. Blank lines are ignored.
+# To reorder: drag lines up/down in any editor (TextEdit is fine), save, commit, push.
+# To remove a tile: delete its line (or comment it out with #).
+# To add a tile: drop the image in /public/projects/brand-works/ and add its filename here.
+
+adobe-4.jpg
+creative-image.jpg
+adobe-3.jpg
+bruh.png
+Shop Logo.jpg
+creative-corp.jpg
+creative-her-3.jpg
+drif-3.png
+drif-5.png
+adobe-1.jpg
+goat-icawn.png
+creative-deep-4.jpg
+adobe-1-copy.jpg
+adobe-4-copy.jpg
+adobe-4-copy-2.jpg
+other-1.png
+shirt-design.png
+logo.png
+untitled-fum.png
