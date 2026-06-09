@@ -70,20 +70,23 @@ const showSectionLabels = visibleSections.length >= 2;
 			>
 				Rameez S. Ahmad
 			</h1>
-			{
-				showNav && (
-					<nav class="flex gap-8 font-sans text-sm">
-						{visibleSections.map((s) => (
-							<a
-								href={`#${s.id}`}
-								class="text-neutral-400 transition-colors hover:text-neutral-100"
-							>
-								{s.title}
-							</a>
-						))}
-					</nav>
-				)
-			}
+			<nav class="flex gap-8 font-sans text-sm">
+				{showNav &&
+					visibleSections.map((s) => (
+						<a
+							href={`#${s.id}`}
+							class="text-neutral-400 transition-colors hover:text-neutral-100"
+						>
+							{s.title}
+						</a>
+					))}
+				<a
+					href="mailto:rameez.s.ahmad@gmail.com"
+					class="text-neutral-400 transition-colors hover:text-neutral-100"
+				>
+					Contact
+				</a>
+			</nav>
 		</div>
 	</header>
 
