@@ -296,7 +296,7 @@ export const sections: Section[] = [
 	},
 	{
 		id: 'brand-works',
-		title: 'Selected Brand Works',
+		title: 'Design & Brand Work',
 		layout: 'gallery',
 		projects: [],
 		// Tiles come from src/data/brand-works-order.txt — drag lines around in
