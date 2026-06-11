@@ -251,7 +251,7 @@ export const sections: Section[] = [
 	},
 	{
 		id: 'work',
-		title: 'Work',
+		title: 'Design & Software',
 		projects: [
 			{
 				slug: 'goat',
