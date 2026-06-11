@@ -92,51 +92,6 @@ const brandWorksTiles: Tile[] = String(brandWorksOrderRaw)
 
 export const sections: Section[] = [
 	{
-		id: 'work',
-		title: 'Work',
-		projects: [
-			{
-				slug: 'goat',
-				name: 'Goat',
-				headingFont: 'STSong',
-				headingWeight: 300,
-				body: [
-					'A custom-built media center and game launcher designed for living room PCs.',
-					'Console and streaming UI cues, built for 10-foot HTPC viewing. Transparent black and white with glassmorphism. Heavy typography, generous spacing.',
-					'Custom player built to render video at the highest quality possible. Reworked controls, timeline, and pause overlay.',
-					'Identity, logo, and visual system carried across splash, installer, and product.',
-					'Tauri, React, TypeScript, Rust. Full controller and keyboard navigation. TMDB, Trakt, Real-Debrid, and IPTV integration.',
-				],
-				tiles: [
-					{ type: 'image', src: 'https://app.paper.design/file-assets/01KREYJZZ62W205RMETRV4HR3R/01KREZ03783JHA0KA9KF6G01ZW.png', width: 377, height: 296 },
-					{ type: 'image', src: 'https://app.paper.design/file-assets/01KREYJZZ62W205RMETRV4HR3R/01KREZ0M0N3NX837C65DWBG2D0.png', width: 444, height: 296, opacity: 0.73 },
-					{ type: 'image', src: 'https://app.paper.design/file-assets/01KREYJZZ62W205RMETRV4HR3R/01KREZ41F9MNJJ4FZYHJ3Y3FTR.png', width: 377, height: 206, opacity: 0.75 },
-					{ type: 'image', src: 'https://app.paper.design/file-assets/01KREYJZZ62W205RMETRV4HR3R/01KREZQZ0DV5S9XBXHDEB9Q35X.png', width: 444, height: 200, opacity: 0.67 },
-					// To add the video ad, drop a tile like:
-					// { type: 'video', youtubeId: 'YOUR_YOUTUBE_ID', width: 444, height: 250, title: 'Goat launch ad' },
-				],
-			},
-			{
-				slug: 'bedside',
-				name: 'Bedside',
-				headingFont: 'STSong',
-				headingWeight: 300,
-				body: [
-					'EPUB reader with a moody, old-library aesthetic. Glassmorphism, film grain, animated gradient backgrounds. Built to feel like an environment, not just a screen.',
-					"Candlelight mode illuminates words near your cursor and fades the rest, mimicking the natural focus of reading under a single light source. Per-book settings save independently, so a gothic novel doesn't need to read like a tech manual.",
-					'Highlight and save snippets to revisit per book. Annotations, find-in-book search, and text-to-speech all built in.',
-					"Library search pulls from Anna's Archive and Z-Library, so almost any book is one query away.",
-				],
-				tiles: [
-					{ type: 'image', src: 'https://app.paper.design/file-assets/01KREYJZZ62W205RMETRV4HR3R/01KRF0BMZVY55J956MVNAWB92P.png', width: 534, height: 349 },
-					{ type: 'image', src: 'https://app.paper.design/file-assets/01KREYJZZ62W205RMETRV4HR3R/01KRHBBQE2ZT1XGABN7FAT7PPC.png', width: 297, height: 349 },
-					{ type: 'image', src: 'https://app.paper.design/file-assets/01KREYJZZ62W205RMETRV4HR3R/01KRF13XG6MRFTJN8CN8BCH1C4.png', width: 382, height: 254 },
-					{ type: 'image', src: 'https://app.paper.design/file-assets/01KREYJZZ62W205RMETRV4HR3R/01KRHV8Y4E229XB7R2A9WQ3WR7.png', width: 448, height: 254 },
-				],
-			},
-		],
-	},
-	{
 		id: 'research',
 		title: 'Research',
 		projects: [
@@ -239,32 +194,6 @@ export const sections: Section[] = [
 				],
 			},
 			{
-				slug: 'healthcare-bystanders',
-				name: 'Addressing The Bystanders: An Integrated Marketing Plan for Launching a Satellite Clinic in Rural Sullivan County, New York',
-				headingFont: 'STSong',
-				headingWeight: 300,
-				body: [
-					`Strategic plan for an affluent for-profit hospital opening its first satellite clinic in Sullivan County, New York. Rural, underserved, chronic gaps in preventive care and disease management. The challenge is building trust and engagement in a population that healthcare systems typically miss.`,
-					`Audience targeting uses two frameworks: Bloem-Stalpers Segment 4 and Deloitte's "Bystanders" segment from "Attract, engage, and build loyalty." Both describe patients who are passive about their health and skeptical of healthcare institutions. Reaching them requires earning trust before asking for engagement.`,
-					`Strategy applies Social Cognitive Theory to the design: messaging built around self-efficacy, role modeling, and outcomes patients can recognize in their own lives.`,
-					`Three objectives: empower patients, build trust between the clinic and the community, and improve health outcomes in the region.`,
-				],
-				tiles: [
-					{ type: 'image', src: '/projects/healthcare-bystanders/preview-2.jpg', width: 272, height: 300 },
-					{ type: 'image', src: '/projects/healthcare-bystanders/preview-1.webp', width: 272, height: 300 },
-					{
-						type: 'pdf',
-						pdf: '/papers/healthcare-bystanders.pdf',
-						preview: '/projects/healthcare-bystanders/preview-3.png',
-						width: 272,
-						height: 300,
-						opacity: 0.4,
-						title: 'Read the full plan',
-						caption: 'Pdf · Read',
-					},
-				],
-			},
-			{
 				slug: 'sonos-audit',
 				name: 'Sonos Brand Audit',
 				headingFont: 'STSong',
@@ -290,6 +219,77 @@ export const sections: Section[] = [
 						title: 'Read the full audit',
 						caption: 'Pdf · Read',
 					},
+				],
+			},
+			{
+				slug: 'healthcare-bystanders',
+				name: 'Addressing The Bystanders: An Integrated Marketing Plan for Launching a Satellite Clinic in Rural Sullivan County, New York',
+				headingFont: 'STSong',
+				headingWeight: 300,
+				body: [
+					`Strategic plan for an affluent for-profit hospital opening its first satellite clinic in Sullivan County, New York. Rural, underserved, chronic gaps in preventive care and disease management. The challenge is building trust and engagement in a population that healthcare systems typically miss.`,
+					`Audience targeting uses two frameworks: Bloem-Stalpers Segment 4 and Deloitte's "Bystanders" segment from "Attract, engage, and build loyalty." Both describe patients who are passive about their health and skeptical of healthcare institutions. Reaching them requires earning trust before asking for engagement.`,
+					`Strategy applies Social Cognitive Theory to the design: messaging built around self-efficacy, role modeling, and outcomes patients can recognize in their own lives.`,
+					`Three objectives: empower patients, build trust between the clinic and the community, and improve health outcomes in the region.`,
+				],
+				tiles: [
+					{ type: 'image', src: '/projects/healthcare-bystanders/preview-2.jpg', width: 272, height: 300 },
+					{ type: 'image', src: '/projects/healthcare-bystanders/preview-1.webp', width: 272, height: 300 },
+					{
+						type: 'pdf',
+						pdf: '/papers/healthcare-bystanders.pdf',
+						preview: '/projects/healthcare-bystanders/preview-3.png',
+						width: 272,
+						height: 300,
+						opacity: 0.4,
+						title: 'Read the full plan',
+						caption: 'Pdf · Read',
+					},
+				],
+			},
+		],
+	},
+	{
+		id: 'work',
+		title: 'Work',
+		projects: [
+			{
+				slug: 'goat',
+				name: 'Goat',
+				headingFont: 'STSong',
+				headingWeight: 300,
+				body: [
+					'A custom-built media center and game launcher designed for living room PCs.',
+					'Console and streaming UI cues, built for 10-foot HTPC viewing. Transparent black and white with glassmorphism. Heavy typography, generous spacing.',
+					'Custom player built to render video at the highest quality possible. Reworked controls, timeline, and pause overlay.',
+					'Identity, logo, and visual system carried across splash, installer, and product.',
+					'Tauri, React, TypeScript, Rust. Full controller and keyboard navigation. TMDB, Trakt, Real-Debrid, and IPTV integration.',
+				],
+				tiles: [
+					{ type: 'image', src: 'https://app.paper.design/file-assets/01KREYJZZ62W205RMETRV4HR3R/01KREZ03783JHA0KA9KF6G01ZW.png', width: 377, height: 296 },
+					{ type: 'image', src: 'https://app.paper.design/file-assets/01KREYJZZ62W205RMETRV4HR3R/01KREZ0M0N3NX837C65DWBG2D0.png', width: 444, height: 296, opacity: 0.73 },
+					{ type: 'image', src: 'https://app.paper.design/file-assets/01KREYJZZ62W205RMETRV4HR3R/01KREZ41F9MNJJ4FZYHJ3Y3FTR.png', width: 377, height: 206, opacity: 0.75 },
+					{ type: 'image', src: 'https://app.paper.design/file-assets/01KREYJZZ62W205RMETRV4HR3R/01KREZQZ0DV5S9XBXHDEB9Q35X.png', width: 444, height: 200, opacity: 0.67 },
+					// To add the video ad, drop a tile like:
+					// { type: 'video', youtubeId: 'YOUR_YOUTUBE_ID', width: 444, height: 250, title: 'Goat launch ad' },
+				],
+			},
+			{
+				slug: 'bedside',
+				name: 'Bedside',
+				headingFont: 'STSong',
+				headingWeight: 300,
+				body: [
+					'EPUB reader with a moody, old-library aesthetic. Glassmorphism, film grain, animated gradient backgrounds. Built to feel like an environment, not just a screen.',
+					"Candlelight mode illuminates words near your cursor and fades the rest, mimicking the natural focus of reading under a single light source. Per-book settings save independently, so a gothic novel doesn't need to read like a tech manual.",
+					'Highlight and save snippets to revisit per book. Annotations, find-in-book search, and text-to-speech all built in.',
+					"Library search pulls from Anna's Archive and Z-Library, so almost any book is one query away.",
+				],
+				tiles: [
+					{ type: 'image', src: 'https://app.paper.design/file-assets/01KREYJZZ62W205RMETRV4HR3R/01KRF0BMZVY55J956MVNAWB92P.png', width: 534, height: 349 },
+					{ type: 'image', src: 'https://app.paper.design/file-assets/01KREYJZZ62W205RMETRV4HR3R/01KRHBBQE2ZT1XGABN7FAT7PPC.png', width: 297, height: 349 },
+					{ type: 'image', src: 'https://app.paper.design/file-assets/01KREYJZZ62W205RMETRV4HR3R/01KRF13XG6MRFTJN8CN8BCH1C4.png', width: 382, height: 254 },
+					{ type: 'image', src: 'https://app.paper.design/file-assets/01KREYJZZ62W205RMETRV4HR3R/01KRHV8Y4E229XB7R2A9WQ3WR7.png', width: 448, height: 254 },
 				],
 			},
 		],
