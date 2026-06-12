@@ -66,6 +66,10 @@ export type Project = {
 	headingFont?: string;
 	headingWeight?: number;
 	body: string[];
+	// Optional text link rendered below the body paragraphs (opens in a new
+	// tab). Used for e.g. linking the full written report when the tiles
+	// showcase a condensed deck.
+	link?: { label: string; href: string };
 	tiles: Tile[];
 };
 
@@ -144,6 +148,7 @@ export const sections: Section[] = [
 					"Digital, OOH, audio, and in-store zones. App and web carry personalized subscription features. Partnerships extend reach beyond Walgreens' existing footprint.",
 					'WVU Reed College of Media. April 2025.',
 				],
+				link: { label: 'Read Full Campaign Proposal Here', href: '/papers/walgreens-wellness.pdf' },
 				tiles: [
 					{
 						type: 'image',
@@ -182,13 +187,13 @@ export const sections: Section[] = [
 					},
 					{
 						type: 'pdf',
-						pdf: '/papers/walgreens-wellness.pdf',
+						pdf: '/papers/walgreens-twc-deck.pdf',
 						preview:
 							'https://app.paper.design/file-assets/01KREYJZZ62W205RMETRV4HR3R/79TT1VHS92ZW2A3VNVJ1YHN5RW.png',
 						width: 390,
 						height: 253,
 						opacity: 0.4,
-						title: 'Read the full report (45 pages)',
+						title: 'View the campaign deck (21 slides)',
 						caption: 'Pdf · Read',
 					},
 				],

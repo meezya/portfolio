@@ -225,6 +225,16 @@ const showSectionLabels = visibleSections.length >= 2;
 												<p class="text-base leading-6 text-neutral-300">{para}</p>
 											))}
 										</div>
+										{project.link && (
+											<a
+												href={project.link.href}
+												target="_blank"
+												rel="noopener"
+												class="font-sans text-xs uppercase tracking-[0.2em] text-neutral-400 transition-colors hover:text-neutral-100"
+											>
+												{project.link.label} →
+											</a>
+										)}
 									</div>
 								</article>
 							);
