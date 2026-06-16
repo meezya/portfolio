@@ -1,1 +1,7 @@
 @import "tailwindcss";
+
+/* Body copy is set in Source Serif 4 (loaded in Layout.astro) to match the
+   design system. Headings set their own serif (STSong / Suranna) inline. */
+@theme {
+	--font-serif: "Source Serif 4", ui-serif, Georgia, Cambria, "Times New Roman", Times, serif;
+}

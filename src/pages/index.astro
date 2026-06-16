@@ -1,11 +1,10 @@
 ---
 import Layout from '../layouts/Layout.astro';
 import Lightbox from '../components/Lightbox.astro';
-import { sections, type Tile } from '../data/projects';
+import { sections, type Tile, type Project } from '../data/projects';
 
-// Outer frame: just dimensions and (optional) absolute placement. No
-// opacity here — that goes on the inner bg layer so captions and overlays
-// stay at full opacity.
+// Outer frame for collage tiles: dimensions and optional absolute placement.
+// Opacity lives on the inner bg layer so captions stay at full opacity.
 function tileFrameStyle(tile: Tile): string {
 	const parts = [`width: ${tile.width}px`, `height: ${tile.height}px`];
 	if (tile.absolute) {
@@ -16,10 +15,9 @@ function tileFrameStyle(tile: Tile): string {
 	return parts.join('; ');
 }
 
-// Inner background layer. Cover-fits the image inside the bg frame and
-// preserves aspect ratio. When tile.frame is set, the bg layer takes those
-// exact dimensions and offsets within the tile (matches Paper's nested
-// "frame + cover-fit + offset" reframing); otherwise it fills the tile.
+// Inner background layer for collage tiles. Cover-fits the image and, when
+// tile.frame is set, takes those exact dimensions and offsets within the tile
+// (matches Paper's nested "frame + cover-fit + offset" reframing).
 function tileBgStyle(tile: Tile): string {
 	const parts = [
 		'position: absolute',
@@ -48,6 +46,14 @@ function tileBgStyle(tile: Tile): string {
 
 	if (tile.opacity !== undefined) parts.push(`opacity: ${tile.opacity}`);
 	return parts.join('; ');
+}
+
+// Per-project heading: a serif display name. Falls back to bold sans when no
+// heading font is set.
+function headingStyle(p: Project): string | undefined {
+	return p.headingFont
+		? `font-family: '${p.headingFont}', 'Songti SC', 'Noto Serif SC', serif; font-weight: ${p.headingWeight ?? 400};`
+		: undefined;
 }
 
 // Render any section that has either projects or gallery tiles.
@@ -139,10 +145,143 @@ const showSectionLabels = visibleSections.length >= 2;
 					{section.layout !== 'gallery' && (
 					<div class="space-y-40">
 						{section.projects.map((project) => {
-							// Compute mediaIndex per tile: image and video tiles get an index
-							// into the per-project carousel; PDFs get null (not in carousel).
+							// ---- Campaign layout: name above, intro column + scroll gallery ----
+							if (project.layout === 'campaign' && project.deck && project.gallery) {
+								const deck = project.deck;
+								const gallery = project.gallery;
+								return (
+									<article class="flex flex-col gap-10">
+										<h2 class="text-4xl" style={headingStyle(project)}>
+											{project.name}
+										</h2>
+										<div class="flex items-start gap-12">
+											<div class="flex w-[600px] flex-shrink-0 flex-col gap-8">
+												<a
+													href={deck.pdf}
+													target="_blank"
+													rel="noopener"
+													class="tile-wrap relative block aspect-video w-full overflow-hidden"
+													aria-label={deck.title || 'View PDF'}
+												>
+													<img
+														src={deck.preview}
+														alt={deck.title || ''}
+														class="tile-bg absolute inset-0 h-full w-full object-cover"
+														style="opacity: 0.4"
+													/>
+													<span class="absolute bottom-3 left-3 right-3 font-sans text-xs uppercase tracking-[0.2em] text-neutral-300">
+														{deck.caption ?? 'PDF · Read'}
+													</span>
+												</a>
+												<div class="flex flex-col gap-6">
+													{project.body.map((para) => (
+														<p class="text-base leading-6 text-neutral-300">{para}</p>
+													))}
+												</div>
+												{project.link && (
+													<a
+														href={project.link.href}
+														target="_blank"
+														rel="noopener"
+														class="font-sans text-xs uppercase tracking-[0.2em] text-neutral-400 transition-colors hover:text-neutral-100"
+													>
+														{project.link.label} →
+													</a>
+												)}
+											</div>
+
+											<div data-drag-scroll class="gallery-scroll flex-1 overflow-x-auto">
+												<div class="flex gap-6 pb-4">
+													{gallery.map((item, i) => (
+														<button
+															type="button"
+															data-tile-project={project.slug}
+															data-tile-index={i}
+															class="tile-wrap relative block h-[688px] w-[311px] flex-shrink-0 cursor-pointer overflow-hidden"
+															aria-label={
+																item.type === 'video'
+																	? item.title || 'Play video'
+																	: item.alt || 'View image'
+															}
+														>
+															<img
+																src={
+																	item.type === 'image'
+																		? item.src
+																		: item.thumbnail ?? `https://img.youtube.com/vi/${item.youtubeId}/maxresdefault.jpg`
+																}
+																alt={item.type === 'image' ? item.alt || '' : item.title || ''}
+																draggable={false}
+																class="block h-full w-full object-cover select-none"
+															/>
+															{item.type === 'video' && (
+																<span class="absolute inset-0 flex items-center justify-center bg-black/20">
+																	<span class="flex h-16 w-16 items-center justify-center rounded-full bg-white/90 pl-1 text-xl text-black">
+																		▶
+																	</span>
+																</span>
+															)}
+														</button>
+													))}
+												</div>
+											</div>
+										</div>
+									</article>
+								);
+							}
+
+							// ---- Research layout: name above, wide deck cover + body ----
+							if (project.layout === 'research' && project.deck) {
+								const deck = project.deck;
+								return (
+									<article class="flex flex-col gap-10">
+										<h2 class="text-4xl" style={headingStyle(project)}>
+											{project.name}
+										</h2>
+										<div class="flex items-start gap-12">
+											<a
+												href={deck.pdf}
+												target="_blank"
+												rel="noopener"
+												class="tile-wrap relative block aspect-video w-[864px] flex-shrink-0 overflow-hidden"
+												aria-label={deck.title || 'View PDF'}
+											>
+												<img
+													src={deck.preview}
+													alt={deck.title || ''}
+													class="tile-bg absolute inset-0 h-full w-full object-cover"
+													style="opacity: 0.4"
+												/>
+												<span class="absolute bottom-3 left-3 right-3 font-sans text-xs uppercase tracking-[0.2em] text-neutral-300">
+													{deck.caption ?? 'PDF · Read'}
+												</span>
+											</a>
+											<div class="flex w-[432px] flex-shrink-0 flex-col gap-10 pt-2">
+												<div class="flex flex-col gap-6">
+													{project.body.map((para) => (
+														<p class="text-base leading-6 text-neutral-300">{para}</p>
+													))}
+												</div>
+												{project.link && (
+													<a
+														href={project.link.href}
+														target="_blank"
+														rel="noopener"
+														class="font-sans text-xs uppercase tracking-[0.2em] text-neutral-400 transition-colors hover:text-neutral-100"
+													>
+														{project.link.label} →
+													</a>
+												)}
+											</div>
+										</div>
+									</article>
+								);
+							}
+
+							// ---- Collage layout (default): media grid + text column ----
+							const tiles = project.tiles ?? [];
 							let mediaIdx = 0;
-							const annotated = project.tiles.map((tile) => {
+							const annotated = tiles.map((tile) => {
 								if (tile.type === 'image' || tile.type === 'video') {
 									return { tile, mediaIndex: mediaIdx++ };
 								}
@@ -212,11 +351,7 @@ const showSectionLabels = visibleSections.length >= 2;
 									<div class="flex w-[432px] flex-shrink-0 flex-col gap-10 pt-2">
 										<h2
 											class:list={['text-4xl', !project.headingFont && 'font-bold']}
-											style={
-												project.headingFont
-													? `font-family: '${project.headingFont}', 'Songti SC', 'Noto Serif SC', serif; font-weight: ${project.headingWeight ?? 400};`
-													: undefined
-											}
+											style={headingStyle(project)}
 										>
 											{project.name}
 										</h2>
@@ -265,8 +400,7 @@ const showSectionLabels = visibleSections.length >= 2;
 
 <style>
 	/* Faded tile background ramps to full opacity on hover. Opacity lives on
-	   the inner .tile-bg layer so the caption above it stays at full opacity
-	   regardless of the resting state. */
+	   the inner .tile-bg layer so the caption above it stays at full opacity. */
 	.tile-bg {
 		transition: opacity 200ms;
 	}
@@ -275,9 +409,8 @@ const showSectionLabels = visibleSections.length >= 2;
 	}
 
 	/* Page-level zoom: the layout was designed at 1600px wide. On narrower
-	   viewports (browser sidebars, small windows) we scale the whole thing
-	   down proportionally so the design stays intact instead of overflowing.
-	   Floor at 0.55 so we don't shrink to unreadable on very small windows. */
+	   viewports we scale the whole thing down proportionally so the design
+	   stays intact instead of overflowing. Floor at 0.55. */
 	@media (max-width: 1600px) {
 		.page-zoom {
 			zoom: clamp(0.55, calc(100vw / 1600px), 1);
@@ -285,8 +418,7 @@ const showSectionLabels = visibleSections.length >= 2;
 	}
 
 	/* Horizontal-scroll gallery: trackpad-swipe works natively, mouse drag is
-	   wired up via the script below. Cursor flips to grabbing while a drag is
-	   in progress; clicks that follow a real drag get suppressed. */
+	   wired up via the script below. */
 	.gallery-scroll {
 		cursor: grab;
 		scroll-behavior: smooth;
@@ -318,9 +450,9 @@ const showSectionLabels = visibleSections.length >= 2;
 
 <script is:inline>
 	// Mouse-drag horizontal scroll for [data-drag-scroll] containers. Trackpad
-	// horizontal scroll already works natively via overflow-x; this is only
-	// for mouse users. Drags that exceed a small threshold suppress the
-	// trailing click so the lightbox doesn't open mid-drag.
+	// horizontal scroll already works natively; this is for mouse users. Drags
+	// past a small threshold suppress the trailing click so the lightbox
+	// doesn't open mid-drag.
 	(function () {
 		const DRAG_THRESHOLD = 6; // px
 
@@ -331,7 +463,6 @@ const showSectionLabels = visibleSections.length >= 2;
 			let dragDistance = 0;
 
 			el.addEventListener('mousedown', (e) => {
-				// Only respond to left mouse button.
 				if (e.button !== 0) return;
 				isDown = true;
 				dragDistance = 0;
@@ -356,8 +487,6 @@ const showSectionLabels = visibleSections.length >= 2;
 				el.scrollLeft = startScroll - delta;
 			});
 
-			// Swallow the trailing click if the user actually dragged. Use
-			// capture so we run before the document-level lightbox listener.
 			el.addEventListener(
 				'click',
 				(e) => {
@@ -369,8 +498,6 @@ const showSectionLabels = visibleSections.length >= 2;
 				true,
 			);
 
-			// Prevent the browser's native image-drag (which would otherwise
-			// hijack the mouse drag and start a file-drag operation).
 			el.addEventListener('dragstart', (e) => e.preventDefault());
 		});
 	})();
