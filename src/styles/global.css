@@ -5,3 +5,12 @@
 @theme {
 	--font-serif: "Source Serif 4", ui-serif, Georgia, Cambria, "Times New Roman", Times, serif;
 }
+
+/* Render the whole page at 75% on desktop, like browser zoom. Applied to the
+   body's children rather than body so the lightbox dialog stays full screen.
+   Phones keep 100% so text stays readable. */
+@media (min-width: 768px) {
+	body > :not(dialog) {
+		zoom: 0.75;
+	}
+}
