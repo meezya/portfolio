@@ -1,0 +1,36 @@
+---
+// Kicker + name on the left, contact links on the right. On project pages the
+// name links back home.
+interface Props {
+	home?: boolean;
+}
+
+const { home = false } = Astro.props;
+const NameTag = home ? 'h1' : 'a';
+---
+
+<header class="mx-auto flex max-w-[1440px] items-end justify-between gap-6 px-5 pt-12 sm:px-12 sm:pt-24">
+	<div class="flex flex-col gap-3">
+		<p class="font-sans text-sm tracking-[0.02em] text-neutral-500">Iso Design &amp; Research</p>
+		<NameTag
+			href={home ? undefined : '/'}
+			class="text-2xl tracking-[-0.04em] text-neutral-100 transition-opacity hover:opacity-70 sm:text-3xl"
+			style="font-family: 'STSong', 'Songti SC', 'Noto Serif SC', serif; font-weight: 300;"
+		>
+			Rameez S. Ahmad
+		</NameTag>
+	</div>
+	<nav class="flex gap-6 pb-1 font-sans text-sm sm:gap-8">
+		<a
+			href="/papers/rameez-ahmad-portfolio.pdf"
+			target="_blank"
+			rel="noopener"
+			class="text-neutral-400 transition-colors hover:text-neutral-100"
+		>
+			PDF
+		</a>
+		<a href="mailto:rameez.s.ahmad@gmail.com" class="text-neutral-400 transition-colors hover:text-neutral-100">
+			Contact
+		</a>
+	</nav>
+</header>

@@ -1,0 +1,142 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import SiteHeader from '../../components/SiteHeader.astro';
+import Lightbox from '../../components/Lightbox.astro';
+import { projectPages, type Project } from '../../data/projects';
+
+export function getStaticPaths() {
+	return projectPages.map((project, i) => ({
+		params: { slug: project.slug },
+		props: { project, next: projectPages[(i + 1) % projectPages.length] },
+	}));
+}
+
+interface Props {
+	project: Project;
+	next: Project;
+}
+
+const { project, next } = Astro.props;
+const { deck, gallery = [] } = project;
+
+const thumb = (item: (typeof gallery)[number]) =>
+	item.type === 'image'
+		? item.src
+		: (item.thumbnail ?? `https://img.youtube.com/vi/${item.youtubeId}/maxresdefault.jpg`);
+---
+
+<Layout title={`${project.name} · Rameez S. Ahmad`} description={project.body[0]}>
+	<SiteHeader />
+
+	<main class="mx-auto max-w-[1440px] px-5 pb-24 sm:px-12">
+		<!-- Logo as the page title -->
+		<section class="flex min-h-[220px] items-center pt-16 sm:min-h-[360px] sm:pt-24">
+			<h1>
+				<span class="sr-only">{project.name}</span>
+				<img
+					src={project.logo.src}
+					alt=""
+					class="block h-auto"
+					style={`width: min(${project.logo.width}px, 100%)`}
+				/>
+			</h1>
+		</section>
+
+		<!-- Summary + deck -->
+		<section class="grid gap-12 border-t border-neutral-900 pt-12 md:grid-cols-[minmax(0,480px)_1fr] md:gap-16 lg:gap-24">
+			<div class="flex flex-col gap-8">
+				<p class="font-sans text-xs uppercase tracking-[0.2em] text-neutral-500">
+					{project.name} · {project.kind}
+				</p>
+				<div class="flex flex-col gap-5">
+					{project.body.map((para) => <p class="text-base leading-7 text-neutral-300">{para}</p>)}
+				</div>
+				{
+					project.link && (
+						<a
+							href={project.link.href}
+							target="_blank"
+							rel="noopener"
+							class="font-sans text-xs uppercase tracking-[0.2em] text-neutral-400 transition-colors hover:text-neutral-100"
+						>
+							{project.link.label} →
+						</a>
+					)
+				}
+			</div>
+
+			{
+				deck && (
+					<a
+						href={deck.pdf}
+						target="_blank"
+						rel="noopener"
+						class="deck group relative block aspect-video w-full self-start overflow-hidden"
+						aria-label={deck.title || 'View PDF'}
+						title={deck.title}
+					>
+						<img
+							src={deck.preview}
+							alt=""
+							class="absolute inset-0 h-full w-full object-cover opacity-50 transition-opacity duration-300 group-hover:opacity-100"
+						/>
+						<span class="absolute bottom-4 left-4 right-4 font-sans text-xs uppercase tracking-[0.2em] text-neutral-200">
+							{deck.caption ?? 'PDF · Read'} →
+						</span>
+					</a>
+				)
+			}
+		</section>
+
+		<!-- Gallery: natural aspect ratios in a masonry column flow -->
+		{
+			gallery.length > 0 && (
+				<section class="mt-24 columns-1 gap-6 sm:columns-2 lg:columns-3">
+					{gallery.map((item, i) => (
+						<button
+							type="button"
+							data-tile-project={project.slug}
+							data-tile-index={i}
+							class="group relative mb-6 block w-full cursor-zoom-in break-inside-avoid overflow-hidden"
+							aria-label={item.type === 'video' ? item.title || 'Play video' : item.alt || 'View image'}
+						>
+							<img
+								src={thumb(item)}
+								alt={item.type === 'image' ? item.alt || '' : item.title || ''}
+								loading="lazy"
+								class="block h-auto w-full transition-opacity duration-300 group-hover:opacity-80"
+							/>
+							{item.type === 'video' && (
+								<span class="absolute inset-0 flex items-center justify-center bg-black/20">
+									<span class="flex h-16 w-16 items-center justify-center rounded-full bg-white/90 pl-1 text-xl text-black">
+										▶
+									</span>
+								</span>
+							)}
+						</button>
+					))}
+				</section>
+			)
+		}
+
+		<!-- Next project -->
+		<nav class="mt-32 flex items-center justify-between gap-8 border-t border-neutral-900 pt-12">
+			<a href="/" class="font-sans text-xs uppercase tracking-[0.2em] text-neutral-500 transition-colors hover:text-neutral-100">
+				← All work
+			</a>
+			<a href={`/work/${next.slug}`} class="group flex items-center gap-6" aria-label={`Next: ${next.name}`}>
+				<span class="font-sans text-xs uppercase tracking-[0.2em] text-neutral-500 transition-colors group-hover:text-neutral-100">
+					Next
+				</span>
+				<img
+					src={next.logo.src}
+					alt=""
+					class="h-auto opacity-70 transition-opacity group-hover:opacity-100"
+					style={`width: ${Math.round(next.logo.width * 0.35)}px`}
+				/>
+			</a>
+		</nav>
+	</main>
+
+	<Lightbox projects={[project]} />
+</Layout>
